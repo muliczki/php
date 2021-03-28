@@ -6,23 +6,26 @@
 class Punto
 {
 
-private $_x;
-private $_y;
+private int $_x;
+private int $_y;
 
-public function __construct($x, $y)
+public function __construct(int $x, int $y)
 {
-    $this->x = $x;
-    $this->y = $y;
+    if(is_int($x) && is_int($y))
+    {
+        $this->_x = $x;
+        $this->_y = $y;
+    }
 }
 
 public function GetX()
 {
-    return $this->x;
+    return $this->_x;
 }
 
 public function GetY()
 {
-    return $this->y;
+    return $this->_y;
 }
 
 }
