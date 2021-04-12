@@ -19,27 +19,13 @@ $usuarios = array();
 
 if(isset($_POST["txtNombre"],$_POST["txtClave"],$_POST["txtMail"], $_FILES["image"]))
 {
-    for ($i=0; $i <3 ; $i++) { 
         
-        $userAux = new Usuario($_POST["txtNombre"], $_POST["txtClave"], $_POST["txtMail"]);
-        
-        //OK PARA UNA FOTO DE UN USUARIO
-        // $nombreFoto = $userAux->Get_id().".jpg";
-        // //$_FILES["image"]["name"] = $nombreFoto;
-        // $destino = "Usuario/Fotos/".$nombreFoto;
-        // move_uploaded_file($_FILES["image"]["tmp_name"],$destino);
-        
-        
-        // YO VOY A USAR LA MISMA FOTO PARA LOS 3 USUARIOS, SE QUE EN LA REALIDAD NO TIENE SENTIDO
-        $nombreFoto = "user".$userAux->Get_id().".jpg";
-        //$_FILES["image"]["name"] = $nombreFoto;
-        $destino = "Usuario\Fotos\\".$nombreFoto;
-        move_uploaded_file($_FILES["image"]["tmp_name"],$destino);
-        echo $_FILES["image"]["tmp_name"], "\n";
-        
-        $userAux->SetFoto($destino);
-        array_push($usuarios, $userAux);
-    }
+    $userAux = new Usuario($_POST["txtNombre"], $_POST["txtClave"], $_POST["txtMail"]);
+    
+    $userAux->GuardarFoto($_FILES["image"]);
+
+    array_push($usuarios, $userAux);
+    
 
     // foreach ($usuarios as $user) {
     //     echo $user->MostrarUsuario();

@@ -29,6 +29,17 @@ class Usuario{
         }
     }
 
+    public static function TransformarAUsuario($nombre, $clave, $mail, $id, $fecha, $foto)
+    {
+        $user = new Usuario($nombre, $clave, $mail);
+        $user->_id = $id;
+        $user->_fechaRegistro = $fecha;
+        $user->_fotoRuta = $foto;
+
+        return $user;
+
+    }
+
 
     // public function __get ($_nombre)
     // {
@@ -81,8 +92,8 @@ class Usuario{
         "Nombre: " . $this->_nombre .
         //"\nClave: " . $this->_clave .
         " / Email: " . $this->_mail .
-        " / id: " . $this->_id .
-        " / fecha: " . $this->_fechaRegistro ."\n";
+        " / Foto: " . $this->_fotoRuta;
+        //" / Fecha: " . $this->_fechaRegistro ."\n";
         return $aux;
 
     }
@@ -115,7 +126,7 @@ class Usuario{
     public static function GuardarJson($usuariosArray)
     {
         $json_string = json_encode($usuariosArray);
-        var_dump($json_string);
+        //var_dump($json_string);
         $file = 'usuarios.json';
         return file_put_contents($file, $json_string);
         
@@ -167,6 +178,37 @@ class Usuario{
         
     }
 
+    public static function LeerJSON(String $archivoPath)
+    {
+        if(!is_null($archivoPath))
+        {
+            $usuarios = array();
+            $data = file_get_contents($archivoPath);
+            
+            //echo $data,"\n";
+            
+            $arrayTexto = json_decode($data, TRUE);
+            
+
+            
+            foreach ($arrayTexto as $array)
+            {
+                
+                //var_dump($array);
+                $user = self::TransformarAUsuario($array["_nombre"], $array["_clave"], $array["_mail"], $array["_id"], $array["_fechaRegistro"], $array["_fotoRuta"]);
+                
+                //echo $user->MostrarUsuario();
+                // $user = self::TransformarAUsuario($array[$i]["_nombre"], $array[$i]["_clave"], $array[$i]["_mail"], $array[$i]["_id"], $array[$i]["_fechaRegistro"], $array[$i]["_fotoRuta"]);
+                
+                array_push($usuarios, $user);
+            }
+
+            //var_dump($usuarios);
+            return $usuarios;
+        }
+        
+    }
+
 
     public static function MostrarListaHtml($usuarios)
     {
@@ -174,10 +216,15 @@ class Usuario{
 
         foreach($usuarios as $user)
         {
-            $aux .= "<li>".$user->MostrarUsuario()."</li>";
+            $aux .= "<li>".$user->MostrarUsuario()."</li>".
+            "<img src=".$user->_fotoRuta.">";
+            
         }
         $aux .= "</ul>";
+
+
         return $aux;
+
     }
 
 
@@ -208,6 +255,24 @@ class Usuario{
         move_uploaded_file($imagen["tmp_name"],$destino);
         
         $this->SetFoto($destino);
+    }
+
+    public static function BuscarUsuario($array, $idValidar)
+    {
+        $retorno = FALSE;
+        if(!is_null($array))
+        {
+            foreach($array as $aux)
+            {
+                if (is_a($aux, "Usuario") && $aux->Get_id() == $idValidar)
+                {
+                    $retorno= TRUE;
+                    break;
+                }
+            }
+
+        }
+        return $retorno;
     }
 
 }
