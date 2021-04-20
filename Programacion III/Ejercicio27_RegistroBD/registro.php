@@ -17,7 +17,7 @@ if(isset($_POST["txtNombre"],$_POST["txtClave"],$_POST["txtMail"], $_POST["txtAp
 
     $user = Usuario::CrearUsuario($_POST["txtNombre"],$_POST["txtClave"],$_POST["txtMail"],$_POST["txtApellido"], $_POST["txtLocalidad"]);
     
-    echo $user->InsertarUsuarioParametros();
+    echo "ID ", $user->InsertarUsuarioParametros(), " INSERTADO EN BASE DE DATOS";
 
 
 }else{

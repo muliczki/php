@@ -12,27 +12,32 @@ class Usuario{
 
     public $_nombre;
     public $_apellido;
-    public $_localidad;
     public $_clave;
     public $_mail;
-    public $_id;
     public $_fechaRegistro;
-    public $_fotoRuta;
+    public $_localidad;
+    public $_id;
 
-    public function __construct(String $nombre, String $clave, String $mail, $apellido, $localidad)
-    {
-        if(is_string($nombre) && is_string($clave) && is_string($mail))
-        {
-            $this->_nombre = $nombre;
-            $this->_clave = $clave;
-            $this->_mail = $mail;
-            $this->_apellido = $apellido;
-            $this->_localidad = $localidad;
-            //$this->_id = self::GetIDoriginal();
-            $this->_fechaRegistro = date("y-m-d");
+    // public function __construct($id=0, $nombre, $apellido, $clave, $mail, $fecha ="---" , $localidad)
+    // {
+    //     if(is_string($nombre) && is_string($clave) && is_string($mail))
+    //     {
+    //         $this->_nombre = $nombre;
+    //         $this->_clave = $clave;
+    //         $this->_mail = $mail;
+    //         $this->_apellido = $apellido;
+    //         $this->_localidad = $localidad;
+    //         //$this->_id = self::GetIDoriginal();
+    //         $this->_fechaRegistro = date("y-m-d");
 
             
-        }
+    //     }
+    // }
+
+
+    public function __construct()
+    {
+        
     }
 
     // public static function TransformarAUsuario($nombre, $clave, $mail, $id, $fecha, $foto)
@@ -74,17 +79,20 @@ class Usuario{
     //     return date("d.m.y");
     // }
 
-    // public function MostrarUsuario()
-    // {
-    //     $aux= "". 
-    //     "Nombre: " . $this->_nombre .
-    //     //"\nClave: " . $this->_clave .
-    //     " / Email: " . $this->_mail .
-    //     " / Foto: " . $this->_fotoRuta;
-    //     //" / Fecha: " . $this->_fechaRegistro ."\n";
-    //     return $aux;
+    public function MostrarUsuario()
+    {
+        $aux= "". 
+        "ID: " . $this->_id .
+        " - Nombre: " . $this->_nombre .
+        " - Apellido: " . $this->_apellido .
+        //"\nClave: " . $this->_clave .
+        " - Email: " . $this->_mail .
+        " - Localidad: " . $this->_localidad .
+        //" / Foto: " . $this->_fotoRuta;
+        " - Fecha: " . $this->_fechaRegistro;
+        return $aux;
 
-    // }
+    }
 
     // public function GuardarCSV()
     // {
@@ -198,22 +206,22 @@ class Usuario{
     // }
 
 
-    // public static function MostrarListaHtml($usuarios)
-    // {
-    //     $aux = "<ul>";
+    public static function MostrarListaHtml($usuarios)
+    {
+        $aux = "<ul>";
 
-    //     foreach($usuarios as $user)
-    //     {
-    //         $aux .= "<li>".$user->MostrarUsuario()."</li>".
-    //         "<img src=".$user->_fotoRuta.">";
+        foreach($usuarios as $user)
+        {
+            $aux .= "<li>".$user->MostrarUsuario()."</li>";
+            //"<img src=".$user->_fotoRuta.">";
             
-    //     }
-    //     $aux .= "</ul>";
+        }
+        $aux .= "</ul>";
 
 
-    //     return $aux;
+        return $aux;
 
-    // }
+    }
 
 
     // public function LogInUsuario($usuarios)
@@ -289,7 +297,13 @@ class Usuario{
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
 	}
 
-
+    public static function TraerTodosLosUsuarios()
+	{
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id as _id,nombre as _nombre,apellido as _apellido,mail as _mail,fecha_de_registro as _fechaRegistro,localidad as _localidad, clave as _clave from usuario");
+        $consulta->execute();			
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "usuario");		
+	}
 
 }
 
