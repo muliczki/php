@@ -10,9 +10,10 @@
 
 include "usuario.php";
 include "venta.php";
+include "producto.php";
 
 
-$usuarios = array();
+$arrayListado = array();
 
 if(isset($_GET["txtListado"]))
 {
@@ -25,8 +26,8 @@ if(isset($_GET["txtListado"]))
             try
             {
             
-                $usuarios = Usuario::TraerTodosLosUsuarios();
-                echo Usuario::MostrarListaHtml($usuarios);
+                $arrayListado = Usuario::TraerTodosLosUsuarios();
+                echo Usuario::MostrarListaHtml($arrayListado);
                
             } 
             catch(PDOException $ex)
@@ -38,18 +39,37 @@ if(isset($_GET["txtListado"]))
 
             // var_dump( $usuarios);
             //    $usuarios = Usuario::LeerJSON("$listado");
-            
-            
            
         break;
 
-        case "productos.json":
-            echo "\n--Listado PRODUCTOS no cargado aún--\n";
+        case "productos":
+            try
+            {
+                $arrayListado = Producto::TraerTodosLosProductos();
+                echo Producto::MostrarListaHtml($arrayListado);
+               
+            } 
+            catch(PDOException $ex)
+            {
+                echo "error ocurrido!"; 
+                echo $ex->getMessage();
+            }
         break;
         
-        case "vehiculos.json":
-            echo "\n--Listado VEHICULOS no cargado aún--\n";
-            break;
+        case "ventas":
+            try
+            {
+            
+                $arrayListado = Venta::TraerTodasLasVentas();
+                echo Venta::MostrarListaHtml($arrayListado);
+               
+            } 
+            catch(PDOException $ex)
+            {
+                echo "error ocurrido!"; 
+                echo $ex->getMessage();
+            }
+        break;
             
         default:
             echo "\n--Ingrese un listado válido--\n";

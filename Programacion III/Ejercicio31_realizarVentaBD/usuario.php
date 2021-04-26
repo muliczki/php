@@ -40,22 +40,22 @@ class Usuario{
         
     }
 
-    // public static function TransformarAUsuario($nombre, $clave, $mail, $id, $fecha, $foto)
-    // {
-    //     $user = new Usuario($nombre, $clave, $mail);
-    //     $user->_id = $id;
-    //     $user->_fechaRegistro = $fecha;
-    //     $user->_fotoRuta = $foto;
 
-    //     return $user;
+    public static function TransformarAUsuario($clave, $mail)
+    {
+        $user = new Usuario();
+        $user->_clave = $clave;
+        $user->_mail = $mail;
 
-    // }
+        return $user;
+
+    }
 
     
-    // public function Get_id()
-    // {
-    //     return $this->_id;
-    // }
+    public function Get_id()
+    {
+        return $this->_id;
+    }
 
 
 
@@ -223,23 +223,24 @@ class Usuario{
     }
 
 
-    // public function LogInUsuario($usuarios)
-    // {
-    //     foreach($usuarios as $user)
-    //     {
-    //         if($user->_mail == $this->_mail)
-    //         {
-    //             if($user->_clave == $this->_clave)
-    //             {
-    //                 return "Verificado :D";
-    //             }else{
-    //                 return "Error en los datos, contraseña incorrecta";
-    //             }
-    //         }
-    //     }
+    public function LogInUsuario($usuarios)
+    {
+        $aux = "Usuario no registrado, el mail no existe";
+        foreach($usuarios as $user)
+        {
+            if($user->_mail == $this->_mail)
+            {
+                if($user->_clave == $this->_clave)
+                {
+                    $aux = "Verificado :D";
+                }else{
+                    $aux = "Error en los datos, contraseña incorrecta";
+                }
+            }
+        }
 
-    //     return "Usuario no registrado, el mail no existe";
-    // }
+        return $aux;
+    }
 
 
     // public function GuardarFoto ($imagen)
@@ -252,35 +253,35 @@ class Usuario{
     //     $this->SetFoto($destino);
     // }
 
-    // public static function BuscarUsuario($array, $idValidar)
-    // {
-    //     $retorno = FALSE;
-    //     if(!is_null($array))
-    //     {
-    //         foreach($array as $aux)
-    //         {
-    //             if (is_a($aux, "Usuario") && $aux->Get_id() == $idValidar)
-    //             {
-    //                 $retorno= TRUE;
-    //                 break;
-    //             }
-    //         }
-
-    //     }
-    //     return $retorno;
-    // }
-
-
-    public static function CrearUsuario($nombre, $clave, $mail, $apellido, $localidad)
+    public static function BuscarUsuario($array, $idValidar)
     {
-        $user = new Usuario($nombre, $clave, $mail, $apellido, $localidad);
-        // $user->_id = $id;
-        // $user->_fechaRegistro = $fecha;
-       // $user->_fotoRuta = $foto;
+        $retorno = FALSE;
+        if(!is_null($array))
+        {
+            foreach($array as $aux)
+            {
+                if (is_a($aux, "Usuario") && $aux->Get_id() == $idValidar)
+                {
+                    $retorno= TRUE;
+                    break;
+                }
+            }
 
-        return $user;
-
+        }
+        return $retorno;
     }
+
+
+    // public static function CrearUsuario($nombre, $clave, $mail, $apellido, $localidad)
+    // {
+    //     $user = new Usuario($nombre, $clave, $mail, $apellido, $localidad);
+    //     // $user->_id = $id;
+    //     // $user->_fechaRegistro = $fecha;
+    //    // $user->_fotoRuta = $foto;
+
+    //     return $user;
+
+    // }
 
     public function InsertarUsuarioParametros()
 	{

@@ -40,16 +40,16 @@ class Usuario{
         
     }
 
-    // public static function TransformarAUsuario($nombre, $clave, $mail, $id, $fecha, $foto)
-    // {
-    //     $user = new Usuario($nombre, $clave, $mail);
-    //     $user->_id = $id;
-    //     $user->_fechaRegistro = $fecha;
-    //     $user->_fotoRuta = $foto;
 
-    //     return $user;
+    public static function TransformarAUsuario($clave, $mail)
+    {
+        $user = new Usuario();
+        $user->_clave = $clave;
+        $user->_mail = $mail;
 
-    // }
+        return $user;
+
+    }
 
     
     // public function Get_id()
@@ -223,23 +223,24 @@ class Usuario{
     }
 
 
-    // public function LogInUsuario($usuarios)
-    // {
-    //     foreach($usuarios as $user)
-    //     {
-    //         if($user->_mail == $this->_mail)
-    //         {
-    //             if($user->_clave == $this->_clave)
-    //             {
-    //                 return "Verificado :D";
-    //             }else{
-    //                 return "Error en los datos, contraseña incorrecta";
-    //             }
-    //         }
-    //     }
+    public function LogInUsuario($usuarios)
+    {
+        $aux = "Usuario no registrado, el mail no existe";
+        foreach($usuarios as $user)
+        {
+            if($user->_mail == $this->_mail)
+            {
+                if($user->_clave == $this->_clave)
+                {
+                    $aux = "Verificado :D";
+                }else{
+                    $aux = "Error en los datos, contraseña incorrecta";
+                }
+            }
+        }
 
-    //     return "Usuario no registrado, el mail no existe";
-    // }
+        return $aux;
+    }
 
 
     // public function GuardarFoto ($imagen)
@@ -271,16 +272,16 @@ class Usuario{
     // }
 
 
-    public static function CrearUsuario($nombre, $clave, $mail, $apellido, $localidad)
-    {
-        $user = new Usuario($nombre, $clave, $mail, $apellido, $localidad);
-        // $user->_id = $id;
-        // $user->_fechaRegistro = $fecha;
-       // $user->_fotoRuta = $foto;
+    // public static function CrearUsuario($nombre, $clave, $mail, $apellido, $localidad)
+    // {
+    //     $user = new Usuario($nombre, $clave, $mail, $apellido, $localidad);
+    //     // $user->_id = $id;
+    //     // $user->_fechaRegistro = $fecha;
+    //    // $user->_fotoRuta = $foto;
 
-        return $user;
+    //     return $user;
 
-    }
+    // }
 
     public function InsertarUsuarioParametros()
 	{

@@ -16,6 +16,18 @@ class Venta{
         
     }
 
+
+    public static function RealizarVenta($idProducto, $idUsuario, $cantidad)
+    {
+        $venta = new Venta();
+        $venta->_fechaVenta = date("y-m-d");
+        $venta->_cantidad = $cantidad;
+        $venta->_idProducto = $idProducto;
+        $venta->_idUsuario = $idUsuario;
+
+        return $venta;
+    }
+
     public function MostrarVenta()
     {
         $aux= "". 
@@ -53,5 +65,17 @@ class Venta{
         return $consulta->fetchAll(PDO::FETCH_CLASS, "venta");		
 	}
 
+    public function InsertarVentaParametros()
+	{
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into venta (id_producto, id_usuario, cantidad, fecha_venta) values(:idProducto,:idUser,:cantidad,:fecha)");
+
+        $consulta->bindValue(':idProducto',$this->_idProducto, PDO::PARAM_INT);
+        $consulta->bindValue(':idUser',$this->_idUsuario, PDO::PARAM_INT);
+        $consulta->bindValue(':fecha', $this->_fechaVenta, PDO::PARAM_STR);
+        $consulta->bindValue(':cantidad', $this->_cantidad, PDO::PARAM_INT);
+        $consulta->execute();		
+        return $objetoAccesoDato->RetornarUltimoIdInsertado();
+	}
 
 }
