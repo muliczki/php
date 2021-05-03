@@ -307,7 +307,7 @@ class Usuario{
 
     public static function TraerTodosLosUsuariosOrdenados($criterio)
 	{
-        if($criterio=="desc")
+        if($criterio=="desc" || $criterio=="DESC")
         {
             $orden = "DESC";
         }else{
