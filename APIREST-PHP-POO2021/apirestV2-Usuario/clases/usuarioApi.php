@@ -10,6 +10,7 @@ class usuarioApi extends usuario implements IApiUsable
      	$newResponse = $response->withJson($elUser, 200);  
     	return $newResponse;
     }
+
      public function TraerTodos($request, $response, $args) {
       	$todosLosUser= usuario::TraerTodoLosUsuarios();
      	$newResponse = $response->withJson($todosLosUser, 200);  
@@ -83,5 +84,21 @@ class usuarioApi extends usuario implements IApiUsable
 		return $response->withJson($objDelaRespuesta, 200);		
     }
 
+
+	public function LogIn($request, $response, $args){
+		
+		$ArrayDeParametros = $request->getParsedBody();
+		$usuarios = Usuario::TraerTodoLosUsuarios();
+		$miUser = new usuario();		
+		$miUser->_mail=$ArrayDeParametros['mail'];
+		$miUser->_clave=$ArrayDeParametros['clave'];
+		
+		$resultado = $miUser->LogInUsuario($usuarios);
+		$objDelaRespuesta= new stdclass();
+		// var_dump($resultado);
+		$objDelaRespuesta->resultado=$resultado;
+		return $response->withJson($objDelaRespuesta, 200);
+
+	}
 
 }

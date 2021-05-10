@@ -159,7 +159,26 @@ class usuario
 
 	public function mostrarDatos()
 	{
-	  	return "Metodo mostar:".$this->_nombre."  ".$this->_mail."  ".$this->_fechaRegistro;
+	  	return "Metodo mostrar:".$this->_nombre."  ".$this->_mail."  ".$this->_fechaRegistro;
 	}
+
+	public function LogInUsuario($usuarios)
+    {
+        $aux = "Usuario no registrado, el mail no existe";
+        foreach($usuarios as $user)
+        {
+            if($user->_mail == $this->_mail)
+            {
+                if($user->_clave == $this->_clave)
+                {
+                    $aux = "Verificado :D";
+                }else{
+                    $aux = "Error en los datos, contraseña incorrecta";
+                }
+            }
+        }
+
+        return $aux;
+    }
 
 }

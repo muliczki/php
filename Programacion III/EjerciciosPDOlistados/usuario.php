@@ -331,6 +331,22 @@ class Usuario{
         $consulta->bindValue(':mail',$this->_mail, PDO::PARAM_STR);
         return $consulta->execute();
 	}
+
+
+    //DATAZO EL PARAM_STR YA LE AGREGA LAS ""
+    public static function TraerUsuariosFiltroNombreApellido($filtro_nombre, $filtro_apellido)
+	{
+        $filtro_nombre = "%".$filtro_nombre."%";
+        $filtro_apellido = "%".$filtro_apellido."%";
+
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id as _id,nombre as _nombre,apellido as _apellido,mail as _mail,fecha_de_registro as _fechaRegistro,localidad as _localidad, clave as _clave from usuario 
+        WHERE nombre LIKE :nombre and apellido LIKE :apellido ");
+        $consulta->bindValue(':nombre', $filtro_nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':apellido', $filtro_apellido, PDO::PARAM_STR);
+        $consulta->execute();			
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "usuario");		
+	}
 }
 
 

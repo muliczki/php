@@ -132,4 +132,43 @@ class Venta{
         $consulta->execute();			
         return $consulta->fetchAll(PDO::FETCH_OBJ);		
 	}
+
+
+    public static function TraerTotalProductoVendidoPorUsuario($producto, $usuario)
+	{
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta =$objetoAccesoDato->RetornarConsulta("select sum(v.cantidad) as cantidad_vendida, v.id_producto, v.id_usuario 
+        FROM venta v 
+        WHERE v.id_producto = :producto and v.id_usuario = :usuario  
+        GROUP BY v.id_producto, v.id_usuario ");
+        $consulta->bindValue(':producto', $producto, PDO::PARAM_INT);
+        $consulta->bindValue(':usuario', $usuario, PDO::PARAM_INT);
+        $consulta->execute();			
+        return $consulta->fetchAll(PDO::FETCH_OBJ);		
+	}
+
+
+    public static function TraerProductoVendidoPorLocalidad($localidad)
+	{
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta =$objetoAccesoDato->RetornarConsulta("select v.id as id_venta, v.id_producto, v.id_usuario, p.codigo_barra, p.nombre as nombre_producto, u.localidad  
+        FROM venta v INNER JOIN usuario u INNER JOIN producto p 
+        WHERE u.localidad = :localidad and v.id_producto = p.id and v.id_usuario = u.id   ");
+        $consulta->bindValue(':localidad', $localidad, PDO::PARAM_STR);
+        $consulta->execute();			
+        return $consulta->fetchAll(PDO::FETCH_OBJ);		
+	}
+
+
+    public static function TraerVentasEntreFechas($f1, $f2)
+	{
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id as _id,id_producto as _idProducto,id_usuario as _idUsuario,cantidad as _cantidad,fecha_venta as _fechaVenta from venta 
+        WHERE fecha_venta BETWEEN :fecha1 and :fecha2");
+        $consulta->bindValue(':fecha1', $f1, PDO::PARAM_INT);
+        $consulta->bindValue(':fecha2', $f2, PDO::PARAM_INT);
+        $consulta->execute();			
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "venta");		
+	}
+
 }

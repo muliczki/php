@@ -104,17 +104,63 @@ elseif(isset($_GET["txtVentasMontoTotal"]))
 }
 
 // H. Obtener la cantidad total de un producto (ejemplo:1003) vendido por un usuario (ejemplo: 104).
+// h :{ archivo :venta.php, renglón :137}
+elseif(isset($_GET["txtIdProducto"], $_GET["txtIdUsuario"]))
+{
+    include "venta.php";
 
+    $ventas = Venta :: TraerTotalProductoVendidoPorUsuario($_GET["txtIdProducto"], $_GET["txtIdUsuario"]);
 
+    for ($i=0; $i < count($ventas); $i++) { 
+
+        foreach ($ventas[$i] as $key => $value) {
+            echo $key . ": " . $value . " - ";
+        }
+        echo "\n";
+    }
+
+}
+// I. Obtener todos los números de los productos vendidos por algún usuario filtrado por localidad (ejemplo: ‘Avellaneda’).
+// i :{ archivo :venta.php, renglón :151}
+elseif(isset($_GET["txtLocalidad"]))
+{
+    include "venta.php";
+
+    $ventas = Venta :: TraerProductoVendidoPorLocalidad($_GET["txtLocalidad"]);
+
+    for ($i=0; $i < count($ventas); $i++) { 
+
+        foreach ($ventas[$i] as $key => $value) {
+            echo $key . ": " . $value . " - ";
+        }
+        echo "\n";
+    }
+
+}
+// J. Obtener los datos completos de los usuarios filtrando por letras en su nombre o apellido.
+// j :{ archivo :usuario.php, renglón :337}
+if(isset($_GET["txtFiltroNombre"], $_GET["txtFiltroApellido"]))
+{
+    include "usuario.php";
+    $usuarios = Usuario::TraerUsuariosFiltroNombreApellido($_GET["txtFiltroNombre"], $_GET["txtFiltroApellido"]);
+    echo Usuario::MostrarListaHtml($usuarios);
+
+}
+
+// K. Mostrar las ventas entre dos fechas del año.
+// k :{ archivo :venta.php, renglón :163}
+elseif(isset($_GET["txtFechaUnoVentas"],$_GET["txtFechaDosVentas"] ))
+{
+    include "venta.php";
+    $ventas = Venta :: TraerVentasEntreFechas($_GET["txtFechaUnoVentas"],$_GET["txtFechaDosVentas"]);
+    echo Venta::MostrarListaHtml($ventas);
+}
 else{
     echo "\nError, dato no ingresado correctamente\n";
 }
 
 
 
-// I. Obtener todos los números de los productos vendidos por algún usuario filtrado por
-// localidad (ejemplo: ‘Avellaneda’).
-// J. Obtener los datos completos de los usuarios filtrando por letras en su nombre o
-// apellido.
-// K. Mostrar las ventas entre dos fechas del año.
+
+
 ?>
