@@ -17,7 +17,6 @@ public static function ObtenerPizzasVendidas()
     }
 
 
-
     public static function MostrarVentasPorFecha($fechaInicio, $fechaFin)
     {
         if (isset($fechaInicio) && isset($fechaFin) && is_string($fechaInicio) && is_string($fechaFin)) {

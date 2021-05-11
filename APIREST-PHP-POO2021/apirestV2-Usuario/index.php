@@ -23,6 +23,109 @@ desarrollo para obtener infor mación sobre los errores
 
 $app = new \Slim\App(["settings" => $config]);
 
+
+/* FUNCION MIDDELWARE*/
+// VERIFICADOR CREDENCIALES
+$VerificadorDeCredenciales = function ($request, $response, $args) {
+
+  if($request->isGet())
+  {
+     $response->getBody()->write('<p>NO necesita credenciales para los get</p>');
+     $response = $args($request, $response);
+  }
+  else
+  {
+    $response->getBody()->write('<p>verifico credenciales</p>');
+    $ArrayDeParametros = $request->getParsedBody();
+    $nombre=$ArrayDeParametros['nombre'];
+    $tipo=$ArrayDeParametros['tipo'];
+    if($tipo=="administrador")
+    {
+      $response->getBody()->write("<h3>Bienvenido $nombre </h3>");
+      $response = $args($request, $response);
+    }
+    else
+    {
+      $response->getBody()->write('<h2>no tenes habilitado el ingreso</h2>');
+      
+      //var_dump($ArrayDeParametros)
+      // array(1) { ["nombre"]=> string(7) "Micaela" }
+    }  
+  }  
+  $response->getBody()->write('<p>vuelvo del verificador de credenciales</p>');
+  return $response;  
+};
+
+// VERIFICADOR JSON
+$VerificadorDeObjetoJson = function ($request, $response, $args) {
+
+  if($request->isGet())
+  {
+     $response->getBody()->write('<p>NO necesita credenciales para los get</p>');
+     $response = $args($request, $response);
+  }
+  else
+  {
+    $response->getBody()->write('<p>verifico credenciales</p>');
+    $ArrayDeParametros = $request->getParsedBody();
+
+    $arrayTexto = json_decode($ArrayDeParametros["obj_json"], TRUE);
+
+    $nombre=$arrayTexto['nombre'];
+    $tipo=$arrayTexto['tipo'];
+
+    if($tipo=="administrador")
+    {
+      $response = $args($request, $response);
+    }
+    else
+    {
+      $objDelaRespuesta= new stdclass();  
+      $objDelaRespuesta->error= $nombre;
+      $newResponse = $response->withJson($objDelaRespuesta, 403);
+      return $newResponse;
+      //var_dump($ArrayDeParametros)
+      // array(1) { ["obj_json"]=> string(44) "{"nombre":"Micaela", "tipo":"administrador"}" }
+    }  
+  }  
+  return $response;  
+};
+
+
+$VerificadorDeObjetoJsonBD = function ($request, $response, $args) {
+
+  if($request->isGet())
+  {
+     $response = $args($request, $response);
+  }
+  else
+  {
+    $response->getBody()->write('<p>verifico credenciales</p>');
+    $ArrayDeParametros = $request->getParsedBody();
+
+    $arrayTexto = json_decode($ArrayDeParametros["obj_json"], TRUE);
+
+    $nombre=$arrayTexto['mail'];  
+    $tipo=$arrayTexto['clave'];
+
+    $usuario = new usuarioApi();
+    // if($usuario-> TraerTodos() )
+    {
+      $response = $args($request, $response);
+    }
+    // else
+    {
+      $objDelaRespuesta= new stdclass();  
+      $objDelaRespuesta->error= $nombre;
+      $newResponse = $response->withJson($objDelaRespuesta, 403);
+      return $newResponse;
+      //var_dump($ArrayDeParametros)
+      // array(1) { ["obj_json"]=> string(44) "{"nombre":"Micaela", "tipo":"administrador"}" }
+    }  
+  }  
+  return $response;  
+};
+
 /*LLAMADA A METODOS DE INSTANCIA DE UNA CLASE*/
 $app->group('/usuario', function () {
  
@@ -39,5 +142,57 @@ $app->group('/usuario', function () {
   $this->post('/login', \usuarioApi::class . ':LogIn');
      
 });
+
+
+//GRUPO CREDENCIALES
+$app->group('/credenciales', function () {
+ 
+  $this->get('/', function (Request $request, Response $response) {    
+    $response->getBody()->write("API => GET");
+    return $response;
+  });
+
+  $this->post('/', function (Request $request, Response $response) {    
+    $response->getBody()->write("API => POST");
+    return $response;
+  });
+     
+})->add($VerificadorDeCredenciales);
+
+
+
+//GRUPO JSON
+$app->group('/json', function () {
+ 
+  $this->get('/', function ($request, $response, $args) {    
+    $objDelaRespuesta= new stdclass();
+    
+    $objDelaRespuesta->mensaje="API => GET";
+    $newResponse = $response->withJson($objDelaRespuesta, 200);  
+    return $newResponse;
+  });
+
+  $this->post('/', function ($request, $response, $args) {    
+    $objDelaRespuesta= new stdclass();
+    $objDelaRespuesta->mensaje="API => POST";
+
+    $newResponse = $response->withJson($objDelaRespuesta, 200);  
+    return $newResponse;
+  });
+     
+})->add($VerificadorDeObjetoJson);
+
+
+
+//GRUPO JSON_BD
+$app->group('/json_bd', function () {
+ 
+  $this->get('/',\usuarioApi::class . ':traerTodos');
+
+  $this->post('/',\usuarioApi::class . ':traerTodos');
+     
+})->add($VerificadorDeObjetoJsonBD);
+
+
 
 $app->run();
