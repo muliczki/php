@@ -1,0 +1,20 @@
+OK 1-(POST)verifique usuario:verificar si el usuario( mail , sexo y clave) coincidencon los guardados en la base de datosretorna un objeto con la respuesta en OK yel tipo de perfil del usuario .
+
+OK 2-(POST)alta de hortaliza( precio, nombre, foto, tipo)
+
+OK 3-(1pt)(GET)listado de todas las hortalizas
+OK 4-(GET)listado de todas las hortalizas deltipoqueenvió como parámetro
+OK 5-(1pt)(GET)traer una hortaliza por ID
+OK 6-(DELETE)borrado de hortaliza por ID
+
+OK PONELE 7-(POST)Alta de venta (idHortaliza,idEmpleado,fecha,cantidad)además de tener una imagen (jpg , jpeg,png)asociada a la venta que será nombrada por elid de la hortaliza y el nombre del cliente en lacarpeta /FotosVentas
+
+8-(PUT) Puede Modificar los datos de una hortalizaincluso la imagen , y si la imagen ya existe debeguardarla en la carpeta /Backup dentro de fotos.
+
+OK 9-(JWT)Utilizar JWT en el punto 1 para realizar ellogueo y Utilizar MW :en el punto 2 y 6  para los administradoresen el punto 5, 7 y 8 solo vendedoresel punto 1 ,3 ,4  para cualquier persona con o  sinusuario
+
+10-  traer :
+    a-todas las ventas de un empleado
+    b-traer la hortaliza con más ventas
+11-(GET)Descarga de PDF de una hortaliza por ID
+12-(GET)Descarga de CSV del listado de hortalizasdisponibles
